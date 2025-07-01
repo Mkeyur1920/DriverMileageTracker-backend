@@ -8,6 +8,8 @@ RUN gradle build
 FROM eclipse-temurin:17-jre
 WORKDIR /DriverMileageTracker-backend
 
+EXPOSE 8080 
+
 # 👇 COPY the built JAR from the builder stage to /app/app.jar
 COPY --from=builder /DriverMileageTracker-backend/build/libs/DriverMileageTracker-backend-1.0-SNAPSHOT.jar app.jar
 
