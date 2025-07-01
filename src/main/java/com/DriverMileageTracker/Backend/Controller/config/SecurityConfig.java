@@ -38,6 +38,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**") // Apply to all endpoints under /api
                 .allowedOrigins("http://localhost:4200")  // Or multiple origins: .allowedOrigins("http://localhost:3000", "http://example.com")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedOrigins("https://drivermileagetrackerapp.onrender.com/**")
                 .allowCredentials(true)
                 .exposedHeaders("Authorization")// Specify allowed methods
                 .allowedHeaders("*"); // or specific headers if needed
