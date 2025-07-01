@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer {
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -22,33 +23,29 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
-//                        .requestMatchers("/api/auth/login").permitAll()
-//                        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-//                        .requestMatchers("/api/teacher/**").hasAuthority("TEACHER")
-//                        .requestMatchers("/api/student/**").hasAuthority("STUDENT")
-                        .anyRequest().authenticated()
-                ).httpBasic();
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/**").permitAll()
+                .anyRequest().authenticated()
+            ).httpBasic();
         return http.build();
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**") // Apply to all endpoints under /api
-                .allowedOrigins("http://localhost:4200")  // Or multiple origins: .allowedOrigins("http://localhost:3000", "http://example.com")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedOrigins("https://drivermileagetrackerapp.onrender.com/api")
-                .allowCredentials(true)
-                .exposedHeaders("Authorization")// Specify allowed methods
-                .allowedHeaders("*"); // or specific headers if needed
+        registry.addMapping("/api/**")
+                .allowedOrigins(
+                    "http://localhost:4200",
+                    "https://drivermileagetrackerapp.onrender.com"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .exposedHeaders("Authorization")
+                .allowCredentials(true);
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
-
-
 }
