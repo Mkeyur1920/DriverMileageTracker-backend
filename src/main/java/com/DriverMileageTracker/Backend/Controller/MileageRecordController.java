@@ -2,12 +2,17 @@ package com.DriverMileageTracker.Backend.Controller;
 
 
 import com.DriverMileageTracker.Backend.DTO.MileageRecordDTO;
+import com.DriverMileageTracker.Backend.Exception.ResourceNotFoundException;
 import com.DriverMileageTracker.Backend.Services.MileageRecordService;
 import org.apache.catalina.mbeans.SparseUserDatabaseMBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/mileage-records")
@@ -30,9 +35,25 @@ public class MileageRecordController {
         return mileageRecordService.getListOfMileageRecords(userId);
     }
     @PostMapping("/save")
-    public MileageRecordDTO create(@RequestBody MileageRecordDTO dto) {
-        return mileageRecordService.createRecord(dto);
+    public ResponseEntity<?> create(@RequestBody MileageRecordDTO dto) {
+        try {
+            MileageRecordDTO saved = mileageRecordService.createRecord(dto);
+            return ResponseEntity.ok(saved);
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("messages", List.of("Mileage record already exists for this date and user.")));
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("messages", List.of(ex.getMessage())));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("messages", List.of("Unexpected error: " + ex.getMessage())));
+        }
     }
+
 
     @PutMapping("/{id}")
     public MileageRecordDTO update(@PathVariable Long id, @RequestBody MileageRecordDTO dto) {

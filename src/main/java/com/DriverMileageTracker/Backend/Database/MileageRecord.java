@@ -1,5 +1,6 @@
 package com.DriverMileageTracker.Backend.Database;
 
+import com.DriverMileageTracker.Backend.Enum.ReportStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -11,7 +12,9 @@ import java.time.LocalDateTime;
 
 // MileageRecord Entity
 @Entity
-@Table(name = "MileageRecord")
+@Table(name = "MileageRecord",uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "date"})
+})
 
 //@NoArgsConstructor
 //@AllArgsConstructor
@@ -33,6 +36,8 @@ public class MileageRecord {
     private int totalKm;
     private String photoUrl;
     private String placesVisited;
+
+
 
     private Long createdBy;
     private LocalDateTime createdDatetime;
@@ -134,4 +139,5 @@ public class MileageRecord {
     public void setLastUpdatedDatetime(LocalDateTime lastUpdatedDatetime) {
         this.lastUpdatedDatetime = lastUpdatedDatetime;
     }
+
 }

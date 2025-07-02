@@ -1,5 +1,6 @@
 package com.DriverMileageTracker.Backend.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.apache.catalina.User;
 
@@ -12,6 +13,7 @@ public class MileageRecordDTO {
     private Long userId;
 
     private UserDTO user;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private int startKm;
     private int endKm;
