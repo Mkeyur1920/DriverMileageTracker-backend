@@ -1,8 +1,11 @@
 package com.DriverMileageTracker.Backend.Controller;
 
+import com.DriverMileageTracker.Backend.DTO.MileageRecordDTO;
 import com.DriverMileageTracker.Backend.DTO.MonthlyReportDTO;
+import com.DriverMileageTracker.Backend.Services.MileageRecordService;
 import com.DriverMileageTracker.Backend.Services.MonthlyReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +15,9 @@ import java.util.List;
 public class MonthlyReportController {
     @Autowired
     private MonthlyReportService monthlyReportService;
+
+    @Autowired
+    private MileageRecordService mileageRecordService;
 
     @GetMapping
     public List<MonthlyReportDTO> getAll() {
@@ -23,9 +29,14 @@ public class MonthlyReportController {
         return monthlyReportService.getReportById(id);
     }
 
-    @PostMapping
-    public MonthlyReportDTO create(@RequestBody MonthlyReportDTO dto) {
-        return monthlyReportService.createReport(dto);
+    @GetMapping("/create")
+    public ResponseEntity<MonthlyReportDTO> generateMonthlyReport(
+            @RequestParam Long userId,
+            @RequestParam int month,
+            @RequestParam int year
+    ) {
+        MonthlyReportDTO monthlyReportDTO = monthlyReportService.createReport(userId, month, year);
+        return ResponseEntity.ok(monthlyReportDTO);
     }
 
     @PutMapping("/{id}")

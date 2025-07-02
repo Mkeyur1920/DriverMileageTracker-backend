@@ -47,8 +47,6 @@ public class MileageRecordServiceImpl implements MileageRecordService {
 
         MileageRecord record = recordMapper.toEntity(dto);
         record.setUser(user);
-        ;
-        record.setDate(LocalDate.now());
         if(dto.getEndKm()>dto.getStartKm()){
             record.setTotalKm(dto.getEndKm()-dto.getStartKm());
         }else {
@@ -79,4 +77,5 @@ public class MileageRecordServiceImpl implements MileageRecordService {
             return 0;
         }
     }
+
 }
