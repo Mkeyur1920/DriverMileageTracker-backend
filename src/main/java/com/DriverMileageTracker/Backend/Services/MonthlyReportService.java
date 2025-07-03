@@ -2,6 +2,7 @@ package com.DriverMileageTracker.Backend.Services;
 
 import com.DriverMileageTracker.Backend.DTO.MileageRecordDTO;
 import com.DriverMileageTracker.Backend.DTO.MonthlyReportDTO;
+import com.DriverMileageTracker.Backend.Enum.ReportStatus;
 
 import java.util.List;
 
@@ -11,4 +12,8 @@ public interface MonthlyReportService {
     MonthlyReportDTO createReport(Long userId, int month, int year);
     MonthlyReportDTO updateReport(Long id, MonthlyReportDTO reportDTO);
     void deleteReport(Long id);
+
+    MonthlyReportDTO updateStatus(Long reportId, ReportStatus status);
+
+    List<MonthlyReportDTO> getPendingReports();
 }

@@ -2,6 +2,7 @@ package com.DriverMileageTracker.Backend.Repository;
 
 import com.DriverMileageTracker.Backend.Database.MonthlyReport;
 import com.DriverMileageTracker.Backend.Database.Users;
+import com.DriverMileageTracker.Backend.Enum.ReportStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +14,8 @@ public interface MonthlyReportRepository extends JpaRepository<MonthlyReport,Lon
     MonthlyReport findByUserIdAndMonth(Long userId, String month);
 
     boolean existsByUserAndMonth(Users user, String month);
+
+    List<MonthlyReport> findByStatus(ReportStatus status);
+
 
 }
