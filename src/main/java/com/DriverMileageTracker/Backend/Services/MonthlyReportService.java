@@ -16,4 +16,6 @@ public interface MonthlyReportService {
     MonthlyReportDTO updateStatus(Long reportId, ReportStatus status);
 
     List<MonthlyReportDTO> getPendingReports();
+
+    List<MonthlyReportDTO> getReportsByUserId(Long userId);
 }

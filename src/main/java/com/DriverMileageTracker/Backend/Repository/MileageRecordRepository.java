@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 @Repository
 public interface MileageRecordRepository extends JpaRepository<MileageRecord,Long> {
@@ -16,5 +18,12 @@ public interface MileageRecordRepository extends JpaRepository<MileageRecord,Lon
     List<MileageRecord> findByUserAndMonthYear(@Param("user") Users user,
                                                @Param("month") int month,
                                                @Param("year") int year);
+
+//    @Query("SELECT m FROM MileageRecord m WHERE m.userId = :userId AND m.date BETWEEN :startDate AND :endDate")
+//    List<MileageRecord> findByUserIdAndMonthRange(@Param("userId") Long userId,
+//                                                  @Param("startDate") LocalDate startDate,
+//                                                  @Param("endDate") LocalDate endDate);
+
+    List<MileageRecord> findByUserIdAndDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
 
 }

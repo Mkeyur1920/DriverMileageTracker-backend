@@ -62,4 +62,10 @@ public class MonthlyReportController {
     ) {
         return ResponseEntity.ok(monthlyReportService.updateStatus(reportId, status));
     }
+
+    @GetMapping("/exists")
+    public ResponseEntity<List<MonthlyReportDTO>> doesMonthlyReportExist(@RequestParam Long userId) {
+        List<MonthlyReportDTO> reports = monthlyReportService.getReportsByUserId(userId);
+        return ResponseEntity.ok(reports);
+    }
 }

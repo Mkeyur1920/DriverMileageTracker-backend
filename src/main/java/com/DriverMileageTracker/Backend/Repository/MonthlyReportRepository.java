@@ -16,6 +16,8 @@ public interface MonthlyReportRepository extends JpaRepository<MonthlyReport,Lon
     boolean existsByUserAndMonth(Users user, String month);
 
     List<MonthlyReport> findByStatus(ReportStatus status);
+    boolean existsByUserId(Long userId);
+
 
 
 }
