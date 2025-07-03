@@ -13,11 +13,10 @@ import org.springframework.stereotype.Service;
 
 import javax.management.AttributeNotFoundException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.YearMonth;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class MileageRecordServiceImpl implements MileageRecordService {
@@ -77,5 +76,21 @@ public class MileageRecordServiceImpl implements MileageRecordService {
             return 0;
         }
     }
+
+    @Override
+    public List<MileageRecordDTO> getRecordsByUserAndMonth(Long userId, String month) {
+        try {
+            YearMonth yearMonth = YearMonth.parse(month);
+            LocalDate start = yearMonth.atDay(1);
+            LocalDate end = yearMonth.atEndOfMonth();
+            List<MileageRecord> records = recordRepository.findByUserIdAndDateBetween(userId,start,end);
+            return records.stream().map(recordMapper::toDTO).collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+
 
 }

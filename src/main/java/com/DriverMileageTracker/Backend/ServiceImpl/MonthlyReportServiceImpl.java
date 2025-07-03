@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,6 +92,27 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .map(reportMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<MonthlyReportDTO> getReportsByUserId(Long userId) {
+        try {
+            List<MonthlyReport> reports = monthlyReportRepository.findByUserId(userId);
+
+            return reports.stream()
+                    .map(reportMapper::toDTO)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            // Log the error for debugging (optional but recommended)
+            System.err.println("Error fetching monthly reports for userId " + userId + ": " + e.getMessage());
+            e.printStackTrace(); // for full stack trace
+
+            // Return empty list or handle as needed
+            return Collections.emptyList();
+        }
+    }
+
+
 
     public MonthlyReportDTO updateStatus(Long reportId, ReportStatus newStatus) {
         MonthlyReport report = monthlyReportRepository.findById(reportId)

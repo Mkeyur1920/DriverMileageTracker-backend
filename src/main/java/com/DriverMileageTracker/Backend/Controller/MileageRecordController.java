@@ -70,4 +70,12 @@ public class MileageRecordController {
     public double getTotalKilometer(@PathVariable Long userId){
         return mileageRecordService.getTotalKilometer(userId);
     }
+    @GetMapping("/get-records-by")
+    public ResponseEntity<List<MileageRecordDTO>> getMileageRecordsByUserAndMonth(
+            @RequestParam Long userId,
+            @RequestParam String month // Format: yyyy-MM
+    ) {
+        List<MileageRecordDTO> records = mileageRecordService.getRecordsByUserAndMonth(userId, month);
+        return ResponseEntity.ok(records);
+    }
 }

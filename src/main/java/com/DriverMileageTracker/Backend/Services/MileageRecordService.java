@@ -14,4 +14,6 @@ public interface MileageRecordService {
     void deleteRecord(Long id);
 
     double getTotalKilometer(Long userId);
+
+    List<MileageRecordDTO> getRecordsByUserAndMonth(Long userId, String month);
 }
