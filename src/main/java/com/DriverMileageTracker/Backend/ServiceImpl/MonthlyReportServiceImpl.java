@@ -40,8 +40,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     private MileageRecordMapper recordMapper;
 
     public List<MonthlyReportDTO> getAllReports() {
-        return null;
-//        return reportRepository.findAll().stream().map(reportMapper::toDTO).toList();
+        return monthlyReportRepository.findAll().stream().map(reportMapper::toDTO).toList();
     }
 
     public MonthlyReportDTO getReportById(Long id) {
@@ -85,4 +84,22 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     public void deleteReport(Long id) {
 
     }
+
+    public List<MonthlyReportDTO> getPendingReports() {
+        List<MonthlyReport> reports = monthlyReportRepository.findByStatus(ReportStatus.PENDING);
+        return reports.stream()
+                .map(reportMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public MonthlyReportDTO updateStatus(Long reportId, ReportStatus newStatus) {
+        MonthlyReport report = monthlyReportRepository.findById(reportId)
+                .orElseThrow(() -> new ResourceNotFoundException("Report not found"));
+
+        report.setStatus(newStatus);
+        report.setLastUpdatedDatetime(LocalDateTime.now());
+        MonthlyReport updated = monthlyReportRepository.save(report);
+        return reportMapper.toDTO(updated);
+    }
+
 }

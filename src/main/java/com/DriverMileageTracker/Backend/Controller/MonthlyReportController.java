@@ -2,6 +2,7 @@ package com.DriverMileageTracker.Backend.Controller;
 
 import com.DriverMileageTracker.Backend.DTO.MileageRecordDTO;
 import com.DriverMileageTracker.Backend.DTO.MonthlyReportDTO;
+import com.DriverMileageTracker.Backend.Enum.ReportStatus;
 import com.DriverMileageTracker.Backend.Services.MileageRecordService;
 import com.DriverMileageTracker.Backend.Services.MonthlyReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class MonthlyReportController {
     @Autowired
     private MileageRecordService mileageRecordService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<MonthlyReportDTO> getAll() {
         return monthlyReportService.getAllReports();
     }
@@ -47,5 +48,18 @@ public class MonthlyReportController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         monthlyReportService.deleteReport(id);
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<List<MonthlyReportDTO>> getPendingReports() {
+        return ResponseEntity.ok(monthlyReportService.getPendingReports());
+    }
+
+    @PutMapping("/{reportId}/status")
+    public ResponseEntity<MonthlyReportDTO> updateReportStatus(
+            @PathVariable Long reportId,
+            @RequestParam ReportStatus status
+    ) {
+        return ResponseEntity.ok(monthlyReportService.updateStatus(reportId, status));
     }
 }

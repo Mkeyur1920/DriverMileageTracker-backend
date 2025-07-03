@@ -8,7 +8,7 @@ import lombok.*;
 //@Builder
 public class MonthlyReportDTO {
     private Long id;
-    private Long userId;
+    private UserDTO user;
     private String month;
     private int totalKm;
 
@@ -21,14 +21,6 @@ public class MonthlyReportDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public String getMonth() {
@@ -61,5 +53,13 @@ public class MonthlyReportDTO {
 
     public void setReportFileUrl(String reportFileUrl) {
         this.reportFileUrl = reportFileUrl;
+    }
+
+    public UserDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 }
