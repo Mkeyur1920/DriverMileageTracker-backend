@@ -43,6 +43,12 @@ public class Users {
     @Column(name ="password")
     private String password;
 
+    @Lob
+    private byte[] signature;
+
+    @Lob
+    private byte[] userPhoto;
+
     private Long createdBy;
     private LocalDateTime createdDatetime;
     private Long lastUpdatedBy;
@@ -142,5 +148,21 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public byte[] getSignature() {
+        return signature;
+    }
+
+    public void setSignature(byte[] signature) {
+        this.signature = signature;
+    }
+
+    public byte[] getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(byte[] userPhoto) {
+        this.userPhoto = userPhoto;
     }
 }

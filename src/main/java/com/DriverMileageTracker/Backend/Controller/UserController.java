@@ -3,8 +3,11 @@ package com.DriverMileageTracker.Backend.Controller;
 import com.DriverMileageTracker.Backend.DTO.UserDTO;
 import com.DriverMileageTracker.Backend.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -28,9 +31,18 @@ public class UserController {
         return userService.createUser(dto);
     }
 
-    @PutMapping("/{id}")
-    public UserDTO update(@PathVariable Long id, @RequestBody UserDTO dto) {
-        return userService.updateUser(id, dto);
+    @PutMapping(value = "/update/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public UserDTO updateUser(
+            @PathVariable Long userId,
+            @RequestParam("name") String name,
+            @RequestParam("phoneNumber") String phoneNumber,
+            @RequestParam("vehicleNumber") String vehicleNumber,
+            @RequestParam(value = "password", required = false) String password,
+            @RequestPart(value = "signature", required = false) MultipartFile signature,
+            @RequestPart(value = "userPhoto", required = false) MultipartFile userPhoto
+    ) throws IOException {
+        return userService.updateUserProfile(userId, name, phoneNumber, vehicleNumber, password, signature != null ? signature.getBytes() : null,
+                userPhoto != null ? userPhoto.getBytes() : null);
     }
 
     @DeleteMapping("/{id}")
