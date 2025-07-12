@@ -1,6 +1,6 @@
 package com.DriverMileageTracker.Backend.Mappers;
 
-import com.DriverMileageTracker.Backend.DTO.MonthlyReportDTO;
+import com.DriverMileageTracker.Backend.Dto.MonthlyReportDTO;
 import com.DriverMileageTracker.Backend.Database.MonthlyReport;
 import org.mapstruct.Mapper;
 

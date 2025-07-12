@@ -1,7 +1,7 @@
 package com.DriverMileageTracker.Backend.Services;
 
-import com.DriverMileageTracker.Backend.DTO.RegisterDto;
-import com.DriverMileageTracker.Backend.DTO.UserDTO;
+import com.DriverMileageTracker.Backend.Dto.RegisterDto;
+import com.DriverMileageTracker.Backend.Dto.UserDTO;
 
 import javax.security.sasl.AuthenticationException;
 

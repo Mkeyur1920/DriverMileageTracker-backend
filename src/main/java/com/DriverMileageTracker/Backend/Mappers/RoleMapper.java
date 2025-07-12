@@ -1,10 +1,8 @@
 package com.DriverMileageTracker.Backend.Mappers;
 
-import com.DriverMileageTracker.Backend.DTO.RoleDTO;
+import com.DriverMileageTracker.Backend.Dto.RoleDTO;
 import com.DriverMileageTracker.Backend.Database.Role;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {

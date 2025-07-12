@@ -1,7 +1,6 @@
 package com.DriverMileageTracker.Backend.Controller;
 
-import com.DriverMileageTracker.Backend.DTO.MileageRecordDTO;
-import com.DriverMileageTracker.Backend.DTO.MonthlyReportDTO;
+import com.DriverMileageTracker.Backend.Dto.MonthlyReportDTO;
 import com.DriverMileageTracker.Backend.Enum.ReportStatus;
 import com.DriverMileageTracker.Backend.Services.MileageRecordService;
 import com.DriverMileageTracker.Backend.Services.MonthlyReportService;

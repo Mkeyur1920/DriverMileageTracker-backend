@@ -1,5 +1,4 @@
-package com.DriverMileageTracker.Backend.DTO;
-import jakarta.persistence.Lob;
+package com.DriverMileageTracker.Backend.Dto;
 import lombok.*;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class UserDTO {
     private String Password;
     private String phoneNumber;
     private String vehicleNumber;
-    private List<ReminderDTO> reminders;
+    private List<NotificationDTO> notifications;
     private Set<RoleDTO> roles;
 
     private String token;
@@ -90,12 +89,12 @@ public class UserDTO {
         this.vehicleNumber = vehicleNumber;
     }
 
-    public List<ReminderDTO> getReminders() {
-        return reminders;
+    public List<NotificationDTO> getNotifications() {
+        return notifications;
     }
 
-    public void setReminders(List<ReminderDTO> reminders) {
-        this.reminders = reminders;
+    public void setNotifications(List<NotificationDTO> notifications) {
+        this.notifications = notifications;
     }
 
     public Set<RoleDTO> getRoles() {

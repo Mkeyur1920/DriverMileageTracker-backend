@@ -1,7 +1,6 @@
 package com.DriverMileageTracker.Backend.ServiceImpl;
 
-import com.DriverMileageTracker.Backend.DTO.RoleDTO;
-import com.DriverMileageTracker.Backend.Database.Role;
+import com.DriverMileageTracker.Backend.Dto.RoleDTO;
 import com.DriverMileageTracker.Backend.Mappers.RoleMapper;
 import com.DriverMileageTracker.Backend.Repository.RoleRepository;
 import com.DriverMileageTracker.Backend.Services.RoleService;

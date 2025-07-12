@@ -1,6 +1,6 @@
 package com.DriverMileageTracker.Backend.ServiceImpl;
 
-import com.DriverMileageTracker.Backend.DTO.MileageRecordDTO;
+import com.DriverMileageTracker.Backend.Dto.MileageRecordDTO;
 import com.DriverMileageTracker.Backend.Database.MileageRecord;
 import com.DriverMileageTracker.Backend.Database.Users;
 import com.DriverMileageTracker.Backend.Exception.ResourceNotFoundException;
@@ -11,12 +11,10 @@ import com.DriverMileageTracker.Backend.Services.MileageRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.management.AttributeNotFoundException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 public class MileageRecordServiceImpl implements MileageRecordService {

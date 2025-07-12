@@ -1,6 +1,5 @@
 package com.DriverMileageTracker.Backend.Repository;
 
-import com.DriverMileageTracker.Backend.DTO.UserDTO;
 import com.DriverMileageTracker.Backend.Database.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

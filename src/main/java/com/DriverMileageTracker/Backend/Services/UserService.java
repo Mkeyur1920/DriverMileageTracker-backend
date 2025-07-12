@@ -1,7 +1,6 @@
 package com.DriverMileageTracker.Backend.Services;
 
-import com.DriverMileageTracker.Backend.DTO.UserDTO;
-import org.springframework.web.multipart.MultipartFile;
+import com.DriverMileageTracker.Backend.Dto.UserDTO;
 
 import java.io.IOException;
 import java.util.List;
