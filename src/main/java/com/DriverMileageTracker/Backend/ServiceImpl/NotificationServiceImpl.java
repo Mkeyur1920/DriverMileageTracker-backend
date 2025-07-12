@@ -51,7 +51,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void markAsRead(Long notificationId) {
         Notification n = notificationRepo.findById(notificationId).orElseThrow();
         n.setStatus("READ");
-        notificationRepo.save(n);
+            notificationRepo.save(n);
     }
 
     @Override
