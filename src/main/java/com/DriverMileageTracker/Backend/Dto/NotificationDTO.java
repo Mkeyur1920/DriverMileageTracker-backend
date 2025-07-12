@@ -1,6 +1,9 @@
 package com.DriverMileageTracker.Backend.Dto;
 
 public class NotificationDTO {
+
+    private Long id;
+
     private String title;
     private String message;
     private String status;
@@ -11,6 +14,14 @@ public class NotificationDTO {
 
     public String getTitle() {
         return title;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setTitle(String title) {

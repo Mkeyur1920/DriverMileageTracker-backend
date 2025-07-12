@@ -36,7 +36,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                     "http://localhost:4200",
                     "https://driver-mileage-tracker-app.vercel.app/auth/login",
-                    "https://driver-mileage-tracker-app.vercel.app/**"
+                    "https://driver-mileage-tracker-app.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
