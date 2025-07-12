@@ -1,4 +1,4 @@
-package com.DriverMileageTracker.Backend.DTO;
+package com.DriverMileageTracker.Backend.Dto;
 
 import lombok.Getter;
 import lombok.Setter;

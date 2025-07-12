@@ -1,8 +1,7 @@
 package com.DriverMileageTracker.Backend.Mappers;
 
-import com.DriverMileageTracker.Backend.DTO.MileageRecordDTO;
+import com.DriverMileageTracker.Backend.Dto.MileageRecordDTO;
 import com.DriverMileageTracker.Backend.Database.MileageRecord;
-import com.DriverMileageTracker.Backend.Database.Users;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

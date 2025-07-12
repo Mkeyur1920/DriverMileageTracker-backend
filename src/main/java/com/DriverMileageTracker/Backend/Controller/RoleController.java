@@ -1,6 +1,6 @@
 package com.DriverMileageTracker.Backend.Controller;
 
-import com.DriverMileageTracker.Backend.DTO.RoleDTO;
+import com.DriverMileageTracker.Backend.Dto.RoleDTO;
 import com.DriverMileageTracker.Backend.Services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

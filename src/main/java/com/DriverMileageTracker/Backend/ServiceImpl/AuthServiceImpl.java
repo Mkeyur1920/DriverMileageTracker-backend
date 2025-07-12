@@ -1,11 +1,9 @@
 package com.DriverMileageTracker.Backend.ServiceImpl;
 
-import com.DriverMileageTracker.Backend.DTO.LoginResponse;
-import com.DriverMileageTracker.Backend.DTO.RegisterDto;
-import com.DriverMileageTracker.Backend.DTO.UserDTO;
+import com.DriverMileageTracker.Backend.Dto.RegisterDto;
+import com.DriverMileageTracker.Backend.Dto.UserDTO;
 import com.DriverMileageTracker.Backend.Database.Role;
 import com.DriverMileageTracker.Backend.Database.Users;
-import com.DriverMileageTracker.Backend.Enum.ROLE;
 import com.DriverMileageTracker.Backend.Mappers.UserMapper;
 import com.DriverMileageTracker.Backend.Repository.RoleRepository;
 import com.DriverMileageTracker.Backend.Repository.UserRepository;
@@ -17,10 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.sasl.AuthenticationException;
-import java.beans.Encoder;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Service

@@ -35,7 +35,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOrigins(
                     "http://localhost:4200",
-                    "https://driver-mileage-tracker-app.vercel.app"
+                    "https://driver-mileage-tracker-app.vercel.app/auth/login",
+                    "https://driver-mileage-tracker-app.vercel.app/**"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")

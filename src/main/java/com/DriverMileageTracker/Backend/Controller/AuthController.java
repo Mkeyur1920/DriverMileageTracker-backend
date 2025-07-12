@@ -1,10 +1,9 @@
 package com.DriverMileageTracker.Backend.Controller;
 
 
-import com.DriverMileageTracker.Backend.DTO.LoginRequest;
-import com.DriverMileageTracker.Backend.DTO.LoginResponse;
-import com.DriverMileageTracker.Backend.DTO.RegisterDto;
-import com.DriverMileageTracker.Backend.DTO.UserDTO;
+import com.DriverMileageTracker.Backend.Dto.LoginRequest;
+import com.DriverMileageTracker.Backend.Dto.RegisterDto;
+import com.DriverMileageTracker.Backend.Dto.UserDTO;
 import com.DriverMileageTracker.Backend.Services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

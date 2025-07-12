@@ -1,21 +1,17 @@
 package com.DriverMileageTracker.Backend.ServiceImpl;
 
-import com.DriverMileageTracker.Backend.DTO.MileageRecordDTO;
-import com.DriverMileageTracker.Backend.DTO.MonthlyReportDTO;
+import com.DriverMileageTracker.Backend.Database.*;
+import com.DriverMileageTracker.Backend.Dto.MonthlyReportDTO;
 //import com.DriverMileageTracker.Backend.Mappers.MonthlyReportMapper;
-import com.DriverMileageTracker.Backend.Database.MileageRecord;
-import com.DriverMileageTracker.Backend.Database.MonthlyReport;
-import com.DriverMileageTracker.Backend.Database.Users;
 import com.DriverMileageTracker.Backend.Enum.ReportStatus;
 import com.DriverMileageTracker.Backend.Exception.ResourceNotFoundException;
 import com.DriverMileageTracker.Backend.Mappers.MileageRecordMapper;
 import com.DriverMileageTracker.Backend.Mappers.MonthlyReportMapper;
 import com.DriverMileageTracker.Backend.Repository.MileageRecordRepository;
 import com.DriverMileageTracker.Backend.Repository.MonthlyReportRepository;
+import com.DriverMileageTracker.Backend.Repository.NotificationRepository;
 import com.DriverMileageTracker.Backend.Repository.UserRepository;
-import com.DriverMileageTracker.Backend.Services.MileageRecordService;
 import com.DriverMileageTracker.Backend.Services.MonthlyReportService;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +35,9 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
     @Autowired
     private MileageRecordMapper recordMapper;
+
+    @Autowired
+    private NotificationRepository notificationRepo;
 
     public List<MonthlyReportDTO> getAllReports() {
         return monthlyReportRepository.findAll().stream().map(reportMapper::toDTO).toList();
@@ -118,10 +117,46 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         MonthlyReport report = monthlyReportRepository.findById(reportId)
                 .orElseThrow(() -> new ResourceNotFoundException("Report not found"));
 
+        // Update report status
         report.setStatus(newStatus);
         report.setLastUpdatedDatetime(LocalDateTime.now());
         MonthlyReport updated = monthlyReportRepository.save(report);
+
+        // ✅ Send notification to the driver
+        Users driver = report.getUser(); // Assuming MonthlyReport has `Users user`
+
+        String title = "Report Status Update";
+        String message = "";
+
+        switch (newStatus) {
+            case GENERATED -> message = "Your monthly report has been approved and generated.";
+            case REJECTED  -> message = "Your monthly report has been rejected. Please review and correct.";
+            case PENDING   -> message = "Your monthly report is currently pending for admin approval.";
+        }
+
+        // Create Notification
+        Notification notification = new Notification();
+        notification.setTitle(title);
+        notification.setMessage(message);
+        notification.setType("RESPONSE");
+        notification.setStatus("UNREAD");
+
+        Users admin = userRepository.findAll().stream()
+                .filter(user -> user.getRoles()
+                        .stream()
+                        .anyMatch(role -> role.getRoleName().equalsIgnoreCase("ADMIN")))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Admin user not found"));
+
+        notification.setSender(admin);
+        notification.setReceiver(driver); // To the driver who submitted report
+        notification.setRelatedReport(report);
+        notification.setCreatedAt(LocalDateTime.now());
+
+        notificationRepo.save(notification);
+
         return reportMapper.toDTO(updated);
     }
+
 
 }

@@ -1,15 +1,10 @@
 package com.DriverMileageTracker.Backend.Mappers;
 
-import com.DriverMileageTracker.Backend.DTO.RegisterDto;
-import com.DriverMileageTracker.Backend.DTO.RoleDTO;
-import com.DriverMileageTracker.Backend.DTO.UserDTO;
+import com.DriverMileageTracker.Backend.Dto.RegisterDto;
+import com.DriverMileageTracker.Backend.Dto.UserDTO;
 import com.DriverMileageTracker.Backend.Database.Users;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
-import javax.management.relation.Role;
 import java.util.List;
 
 @Mapper(componentModel = "spring")

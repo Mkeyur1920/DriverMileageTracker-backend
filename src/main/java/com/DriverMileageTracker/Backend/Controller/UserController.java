@@ -1,6 +1,6 @@
 package com.DriverMileageTracker.Backend.Controller;
 
-import com.DriverMileageTracker.Backend.DTO.UserDTO;
+import com.DriverMileageTracker.Backend.Dto.UserDTO;
 import com.DriverMileageTracker.Backend.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

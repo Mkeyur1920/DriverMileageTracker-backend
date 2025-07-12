@@ -34,8 +34,11 @@ public class Users {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Reminder> reminders = new ArrayList<>();
+    @OneToMany(mappedBy = "sender")
+    private List<Notification> sentNotifications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Notification> receivedNotifications = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<MileageRecord> mileageRecords = new ArrayList<>();
@@ -126,12 +129,20 @@ public class Users {
         this.lastUpdatedDatetime = lastUpdatedDatetime;
     }
 
-    public List<Reminder> getReminders() {
-        return reminders;
+    public List<Notification> getSentNotifications() {
+        return sentNotifications;
     }
 
-    public void setReminders(List<Reminder> reminders) {
-        this.reminders = reminders;
+    public void setSentNotifications(List<Notification> sentNotifications) {
+        this.sentNotifications = sentNotifications;
+    }
+
+    public List<Notification> getReceivedNotifications() {
+        return receivedNotifications;
+    }
+
+    public void setReceivedNotifications(List<Notification> receivedNotifications) {
+        this.receivedNotifications = receivedNotifications;
     }
 
     public List<MileageRecord> getMileageRecords() {

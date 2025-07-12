@@ -1,10 +1,9 @@
 package com.DriverMileageTracker.Backend.Controller;
 
 
-import com.DriverMileageTracker.Backend.DTO.MileageRecordDTO;
+import com.DriverMileageTracker.Backend.Dto.MileageRecordDTO;
 import com.DriverMileageTracker.Backend.Exception.ResourceNotFoundException;
 import com.DriverMileageTracker.Backend.Services.MileageRecordService;
-import org.apache.catalina.mbeans.SparseUserDatabaseMBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

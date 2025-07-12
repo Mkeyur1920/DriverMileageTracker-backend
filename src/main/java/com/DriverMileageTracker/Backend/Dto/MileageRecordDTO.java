@@ -1,8 +1,6 @@
-package com.DriverMileageTracker.Backend.DTO;
+package com.DriverMileageTracker.Backend.Dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
-import org.apache.catalina.User;
 
 import java.time.LocalDate;
 

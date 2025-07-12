@@ -1,6 +1,6 @@
 package com.DriverMileageTracker.Backend.Services;
 
-import com.DriverMileageTracker.Backend.DTO.MileageRecordDTO;
+import com.DriverMileageTracker.Backend.Dto.MileageRecordDTO;
 
 import java.util.List;
 
