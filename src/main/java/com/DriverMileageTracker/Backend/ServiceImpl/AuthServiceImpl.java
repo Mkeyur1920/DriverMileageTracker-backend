@@ -1,5 +1,6 @@
 package com.DriverMileageTracker.Backend.ServiceImpl;
 
+import com.DriverMileageTracker.Backend.Dto.LoginResponse;
 import com.DriverMileageTracker.Backend.Dto.RegisterDto;
 import com.DriverMileageTracker.Backend.Dto.UserDTO;
 import com.DriverMileageTracker.Backend.Database.Role;
@@ -12,6 +13,7 @@ import com.DriverMileageTracker.Backend.Services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,10 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public UserDTO authenticate(String phoneNumber, String vehicleNumber, String password) throws AuthenticationException {
+    @Autowired
+    private com.DriverMileageTracker.Backend.Controller.config.CustomUserDetailsService userDetailsService;
+
+    public LoginResponse authenticate(String phoneNumber, String vehicleNumber, String password) throws AuthenticationException {
         String identifier = (phoneNumber != null && !phoneNumber.isBlank())
                 ? phoneNumber.trim()
                 : (vehicleNumber != null ? vehicleNumber.trim() : "");
@@ -68,12 +73,62 @@ public class AuthServiceImpl implements AuthService {
                 ? Collections.emptyList()
                 : persistedUser.getRoles().stream().map(Role::getRoleName).toList();
 
-        String token = jwtUtil.generateToken(identifier, roles);
+        String accessToken = jwtUtil.generateAccessToken(identifier, roles);
+        String refreshToken = jwtUtil.generateRefreshToken(identifier);
 
         UserDTO userDTO = userMapper.toDto(persistedUser);
         userDTO.setPassword("");
-        userDTO.setToken(token);
-        return userDTO;
+        userDTO.setToken(accessToken);
+
+        LoginResponse response = new LoginResponse();
+        response.setToken(accessToken);
+        response.setRefreshToken(refreshToken);
+        response.setUser(userDTO);
+        return response;
+    }
+
+    @Override
+    public LoginResponse refreshAccessToken(String refreshToken) throws AuthenticationException {
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new AuthenticationException("Refresh token is required.");
+        }
+
+        String identifier;
+        try {
+            identifier = jwtUtil.extractUsername(refreshToken);
+        } catch (Exception ex) {
+            throw new AuthenticationException("Invalid refresh token.");
+        }
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(identifier);
+        if (!jwtUtil.validateRefreshToken(refreshToken, userDetails)) {
+            throw new AuthenticationException("Refresh token is expired or invalid.");
+        }
+
+        Users persistedUser = usersRepository.findByPhoneNumber(identifier);
+        if (persistedUser == null) {
+            persistedUser = usersRepository.findByVehicleNumber(identifier);
+        }
+        if (persistedUser == null) {
+            throw new AuthenticationException("User not found.");
+        }
+
+        List<String> roles = persistedUser.getRoles() == null
+                ? Collections.emptyList()
+                : persistedUser.getRoles().stream().map(Role::getRoleName).toList();
+
+        String newAccessToken = jwtUtil.generateAccessToken(identifier, roles);
+        String newRefreshToken = jwtUtil.generateRefreshToken(identifier);
+
+        UserDTO userDTO = userMapper.toDto(persistedUser);
+        userDTO.setPassword("");
+        userDTO.setToken(newAccessToken);
+
+        LoginResponse response = new LoginResponse();
+        response.setToken(newAccessToken);
+        response.setRefreshToken(newRefreshToken);
+        response.setUser(userDTO);
+        return response;
     }
 
     @Override
