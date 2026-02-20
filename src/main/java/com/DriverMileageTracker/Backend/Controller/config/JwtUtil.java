@@ -1,57 +1,55 @@
 package com.DriverMileageTracker.Backend.Controller.config;
 
-import com.DriverMileageTracker.Backend.Database.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "mySecreteKeyurJJHKDKSLSLLSLSLSLOOEOOEORIIRIJSJJSJSNNNNCBBVBVNVNVNVNVKKV"; // Use environment variable for this in production
+    @Value("${jwt.secret-key}")
+    private String secret;
 
-    private static final long EXPIRATION_TIME = 86400000; // 1 day
+    @Value("${jwt.expiration-ms:86400000}")
+    private long expirationMs;
 
-    Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
-    public String generateToken(String username, Role role) {
+    public String generateToken(String username, Collection<String> roles) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .claim("name",username)
-                .claim("role",role)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, secretKey) // Use injected key
+                .claim("roles", List.copyOf(roles))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-//    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-//        try {  // Important: Add a try-catch block
-//            final Claims claims = Jwts.parser() // Use parserBuilder for newer JJWT versions
-//                    .setSigningKey(signingKey)
-//                    .parseClaimsJws(token)
-//                    .getBody();
-//            return claimsResolver.apply(claims);
-//        } catch (Exception e) { // Catch JWT-related exceptions (e.g., expired, invalid signature)
-//            return null; // Or throw a custom exception if you prefer
-//        }
-//    }
-
-    public boolean validateToken(String token, String username) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         String extractedUsername = extractUsername(token);
-        return extractedUsername != null && extractedUsername.equals(username) && !isTokenExpired(token);
+        return extractedUsername != null
+                && extractedUsername.equals(userDetails.getUsername())
+                && !isTokenExpired(token);
     }
 
-
-
-
     public Claims extractClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public String extractUsername(String token) {
