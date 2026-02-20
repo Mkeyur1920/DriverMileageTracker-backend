@@ -2,8 +2,9 @@ package com.DriverMileageTracker.Backend.Controller;
 
 
 import com.DriverMileageTracker.Backend.Dto.LoginRequest;
+import com.DriverMileageTracker.Backend.Dto.LoginResponse;
+import com.DriverMileageTracker.Backend.Dto.RefreshTokenRequest;
 import com.DriverMileageTracker.Backend.Dto.RegisterDto;
-import com.DriverMileageTracker.Backend.Dto.UserDTO;
 import com.DriverMileageTracker.Backend.Services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +23,19 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody  LoginRequest loginRequest) throws AuthenticationException {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws AuthenticationException {
 
-        UserDTO user = authService.authenticate(loginRequest.getPhoneNumber(), loginRequest.getVehicleNumber(),
+        LoginResponse response = authService.authenticate(loginRequest.getPhoneNumber(), loginRequest.getVehicleNumber(),
                 loginRequest.getPassword());
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refresh(@RequestBody RefreshTokenRequest request) throws AuthenticationException {
+        LoginResponse response = authService.refreshAccessToken(request.getRefreshToken());
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<RegisterDto> login(@RequestBody Map<String, RegisterDto> body) {
         try {
