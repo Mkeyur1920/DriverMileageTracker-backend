@@ -4,6 +4,7 @@ import com.DriverMileageTracker.Backend.Dto.RegisterDto;
 import com.DriverMileageTracker.Backend.Dto.UserDTO;
 import com.DriverMileageTracker.Backend.Database.Role;
 import com.DriverMileageTracker.Backend.Database.Users;
+import com.DriverMileageTracker.Backend.Controller.config.JwtUtil;
 import com.DriverMileageTracker.Backend.Mappers.UserMapper;
 import com.DriverMileageTracker.Backend.Repository.RoleRepository;
 import com.DriverMileageTracker.Backend.Repository.UserRepository;
@@ -15,7 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.sasl.AuthenticationException;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -34,27 +37,42 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private AuthenticationManager authManager;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     public UserDTO authenticate(String phoneNumber, String vehicleNumber, String password) throws AuthenticationException {
+        String identifier = (phoneNumber != null && !phoneNumber.isBlank())
+                ? phoneNumber.trim()
+                : (vehicleNumber != null ? vehicleNumber.trim() : "");
 
-        Users persistedUser;
-
-        if(phoneNumber!=null && !phoneNumber.contains(" ")){
-            persistedUser = usersRepository.findByPhoneNumber(phoneNumber);
-        }else{
-            persistedUser = usersRepository.findByVehicleNumber(vehicleNumber);
+        if (identifier.isBlank()) {
+            throw new AuthenticationException("Phone number or vehicle number is required.");
         }
 
-//        boolean isPasswordMatch = (passwordEncoder.matches(password,persistedUser.getPassword()));
-
-        if (!(passwordEncoder.matches(password,persistedUser.getPassword()))) {
-            throw new AuthenticationException("Incorrect password");
+        try {
+            authManager.authenticate(new UsernamePasswordAuthenticationToken(identifier, password));
+        } catch (org.springframework.security.core.AuthenticationException ex) {
+            throw new AuthenticationException("Invalid credentials");
         }
 
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(phoneNumber + "|" + vehicleNumber, password);
+        Users persistedUser = usersRepository.findByPhoneNumber(identifier);
+        if (persistedUser == null) {
+            persistedUser = usersRepository.findByVehicleNumber(identifier);
+        }
+
+        if (persistedUser == null) {
+            throw new AuthenticationException("User not found.");
+        }
+
+        List<String> roles = persistedUser.getRoles() == null
+                ? Collections.emptyList()
+                : persistedUser.getRoles().stream().map(Role::getRoleName).toList();
+
+        String token = jwtUtil.generateToken(identifier, roles);
 
         UserDTO userDTO = userMapper.toDto(persistedUser);
-        userDTO.setToken(authToken.toString());
+        userDTO.setPassword("");
+        userDTO.setToken(token);
         return userDTO;
     }
 
