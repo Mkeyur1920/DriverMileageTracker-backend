@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
 
         Users persistedUser;
 
-        if(phoneNumber!=null){
+        if(phoneNumber!=null && !phoneNumber.contains(" ")){
             persistedUser = usersRepository.findByPhoneNumber(phoneNumber);
         }else{
             persistedUser = usersRepository.findByVehicleNumber(vehicleNumber);
