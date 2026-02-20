@@ -8,8 +8,9 @@ import com.DriverMileageTracker.Backend.Mappers.MileageRecordMapper;
 import com.DriverMileageTracker.Backend.Repository.MileageRecordRepository;
 import com.DriverMileageTracker.Backend.Repository.UserRepository;
 import com.DriverMileageTracker.Backend.Services.MileageRecordService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -18,13 +19,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class MileageRecordServiceImpl implements MileageRecordService {
-    @Autowired
-    private MileageRecordRepository recordRepository;
-    @Autowired
-    private MileageRecordMapper recordMapper;
+    private final MileageRecordRepository recordRepository;
+    private final MileageRecordMapper recordMapper;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public MileageRecordServiceImpl(MileageRecordRepository recordRepository, MileageRecordMapper recordMapper, UserRepository userRepository) {
+        this.recordRepository = recordRepository;
+        this.recordMapper = recordMapper;
+        this.userRepository = userRepository;
+    }
 
     public List<MileageRecordDTO> getAllRecords() {
             return recordRepository.findAll().stream().map(recordMapper::toDTO).toList();
@@ -34,6 +37,7 @@ public class MileageRecordServiceImpl implements MileageRecordService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MileageRecordDTO> getListOfMileageRecords(Long userId) {
         List<MileageRecord> records =  recordRepository.findByUserId(userId).stream().toList();
         return records.stream().map(recordMapper::toDTO).collect(Collectors.toList());
